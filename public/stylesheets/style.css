@@ -1,8 +1,35 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url("/images/background.png");
+  background-color: grey;
 }
 
+
 a {
-  color: #00B7FF;
+  color: white;
+  font-size: large;
+  text-decoration: none;
+}
+
+
+
+.signup {
+  height: 40px;
+  width: 200px;
+  margin: 300px 0px 0px 450px;
+  background-color: red;
+  border: 0px;
+}
+
+#form {
+  margin: 200px 0px 0px 450px;
+}
+
+.form {
+  width: 250px;
+  height: 30px;
+  background-color: red;
+  color: white;
+  border: 0px;
 }

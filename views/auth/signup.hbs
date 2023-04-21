@@ -1,17 +1,27 @@
 <div id="form">
   <h2>Sign Up</h2>
-  <form action="/signup" method="POST">
-
-    <label> Username
+  <form action="/signup" method="POST" >
+    <br />
+    <br />
+    <label>
+      Username
       <input type="text" name="username" placeholder="Your username" />
     </label>
+    <br />
+    <br />
+    <br />
 
-    <label> Password
+    <label>
+      Password
       <input type="password" name="password" placeholder="Your password" />
     </label>
-
-    <button type="submit">Sign Up</button>
-
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <button class="form" type="submit">Sign Up</button>
 
     {{#if errorMessage}}
       <p class="error">{{errorMessage}}</p>
