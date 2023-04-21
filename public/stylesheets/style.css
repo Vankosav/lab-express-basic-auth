@@ -8,16 +8,16 @@ body {
 
 a {
   color: white;
-  font-size: large;
+ 
   text-decoration: none;
 }
 
 
 
 .signup {
-  height: 40px;
-  width: 200px;
-  margin: 300px 0px 0px 450px;
+  height: 30px;
+  width: 250px;
+  margin: 435px 0px 0px 450px;
   background-color: red;
   border: 0px;
 }
