@@ -18,9 +18,9 @@ router.get("/signup", (req, res) => {
 
   // POST /auth/signup
 router.post("/signup",  (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
   
-    // Check that username, email, and password are provided
+    // Check that username and password are provided
     if (username === "" || password === "") {
       res.status(400).render("auth/signup", {
         errorMessage:
@@ -37,9 +37,8 @@ router.post("/signup",  (req, res) => {
   
       return;
     }
-});
 
- // Create a new user - start by hashing the password
+    // Create a new user - start by hashing the password
  bcryptjs
  .genSalt(saltRounds)
  .then((salt) => bcryptjs.hash(password, salt))
@@ -48,7 +47,7 @@ router.post("/signup",  (req, res) => {
    return User.create({ username, password: passwordHash });
  })
  .then((user) => {
-   res.redirect("/auth/login");
+   res.redirect("/login");
  })
  .catch((error) => {
    if (error instanceof mongoose.Error.ValidationError) {
@@ -56,10 +55,62 @@ router.post("/signup",  (req, res) => {
    } else if (error.code === 11000) {
      res.status(500).render("auth/signup", {
        errorMessage:
-         "Username and email need to be unique. Provide a valid username or email.",
+         "Username needs to be unique. Provide a valid username.",
      });
     }
 });
+});
 
+
+
+ 
+
+router.get("/login", (req, res) => {
+    res.render("auth/login");
+  });
+
+  router.post("/login", (req, res, next) => {
+    const { username, password } = req.body;
+  
+    if (username === "" || password === "") {
+        res.status(400).render("auth/login", {
+          errorMessage:
+            "All fields are mandatory. Please provide username and password.",
+        });
+    
+        return;
+      }
+      if (password.length < 6) {
+        return res.status(400).render("auth/login", {
+          errorMessage: "Your password needs to be at least 6 characters long.",
+        });
+      }
+    
+      // Search the database for a user with the email submitted in the form
+      User.findOne({ username })
+        .then((user) => {
+          // If the user isn't found, send an error message that user provided wrong credentials
+          if (!user) {
+            res
+              .status(400)
+              .render("auth/login", { errorMessage: "Wrong credentials." });
+            return;
+          }
+    
+          // If user is found based on the username, check if the in putted password matches the one saved in the database
+          bcryptjs
+            .compare(password, user.password)
+            .then((isSamePassword) => {
+              if (!isSamePassword) {
+                res
+                  .status(400)
+                  .render("auth/login", { errorMessage: "Wrong credentials." });
+                return;
+              }
+            })
+            .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
+        })
+    })
+        
 
 module.exports = router;
