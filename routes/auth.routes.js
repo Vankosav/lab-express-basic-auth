@@ -11,13 +11,16 @@ const saltRounds = 10;
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
 
+const isLoggedOut = require("../middleware/isLoggedOut");
+//const isLoggedIn = require("../middleware/isLoggedIn");
+
 // GET /auth/signup
-router.get("/signup", (req, res) => {
+router.get("/signup", isLoggedOut, (req, res) => {
     res.render("auth/signup", { errorMessage: ""});
   });
 
   // POST /auth/signup
-router.post("/signup",  (req, res) => {
+router.post("/signup", isLoggedOut, (req, res) => {
     const { username, password } = req.body;
   
     // Check that username and password are provided
@@ -47,7 +50,7 @@ router.post("/signup",  (req, res) => {
    return User.create({ username, password: passwordHash });
  })
  .then((user) => {
-   res.redirect("/login");
+   res.redirect("/auth/login");
  })
  .catch((error) => {
    if (error instanceof mongoose.Error.ValidationError) {
@@ -65,11 +68,11 @@ router.post("/signup",  (req, res) => {
 
  
 
-router.get("/login", (req, res) => {
+router.get("/login", isLoggedOut, (req, res) => {
     res.render("auth/login");
   });
 
-  router.post("/login", (req, res, next) => {
+  router.post("/login", isLoggedOut, (req, res, next) => {
     const { username, password } = req.body;
   
     if (username === "" || password === "") {
@@ -89,6 +92,7 @@ router.get("/login", (req, res) => {
       // Search the database for a user with the email submitted in the form
       User.findOne({ username })
         .then((user) => {
+          console.log(user);
           // If the user isn't found, send an error message that user provided wrong credentials
           if (!user) {
             res
@@ -106,11 +110,23 @@ router.get("/login", (req, res) => {
                   .status(400)
                   .render("auth/login", { errorMessage: "Wrong credentials." });
                 return;
+              } else {
+                req.session.currentUser = user.toObject();
+          // Remove the password field
+          delete req.session.currentUser.password;
+
+          res.redirect("/auth/userProfile")
               }
-            })
-            .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
         })
+        .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
     })
+    .catch((err) => next(err));
+});
+           
+router.get("/userProfile", isLoggedOut, (req, res) => {
+  res.render("auth/user-profile");
+});
+
         
 
 module.exports = router;

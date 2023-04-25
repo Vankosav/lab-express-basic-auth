@@ -22,6 +22,14 @@ a {
   border: 0px;
 }
 
+.login {
+  height: 30px;
+  width: 250px;
+  margin: 15px 0px 0px 450px;
+  background-color: blue;
+  border: 0px;
+}
+
 #form {
   margin: 200px 0px 0px 450px;
 }
