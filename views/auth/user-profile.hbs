@@ -1,8 +1,14 @@
 
-  <h2>Welcome!</h2>
+ <div id="user-profile">
  {{#if user}} 
-<p>This is your profile page {{ user.username }}!</p>
-  <button>
+<h2> Welcome {{ user.username }}!</h2>
+<p>{{message}}</p>
+<br>
+<br>
+<br>
+<br>
+  <button class="form" >
     <a href="/auth/userProfile">Reload the page</a>
   </button>
 {{/if}}
+</div>

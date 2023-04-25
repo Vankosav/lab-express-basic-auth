@@ -41,3 +41,12 @@ a {
   color: white;
   border: 0px;
 }
+
+#login-form {
+  margin: 200px 0px 0px 450px;
+}
+
+
+#user-profile {
+  margin: 200px 0px 0px 450px
+}

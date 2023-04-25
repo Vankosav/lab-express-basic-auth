@@ -112,6 +112,7 @@ router.get("/login", isLoggedOut, (req, res) => {
                 return;
               } else {
                 req.session.currentUser = user.toObject();
+                req.session.message = "This is your profile page!";
           // Remove the password field
           delete req.session.currentUser.password;
 
@@ -124,7 +125,7 @@ router.get("/login", isLoggedOut, (req, res) => {
 });
            
 router.get("/userProfile", isLoggedOut, (req, res) => {
-  res.render("auth/user-profile");
+  res.render("auth/user-profile", { user: req.session.currentUser, message: req.session.message});
 });
 
         
